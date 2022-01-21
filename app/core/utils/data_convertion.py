@@ -3,20 +3,38 @@ from core.utils.constants import Constants
 
 
 class DataConversion:
+    # @staticmethod
+    # def format_nid(str_nid):
+    #     if str_nid.startswith('ART') and str(str_nid).find('_') == -1:
+    #         if len(str_nid.split('.')[1]) == 16:
+    #             nid = str_nid.split('.')[1]
+    #             return '0' + str(nid[0:9]) + Constants.SLASH + \
+    #                 str(Constants().get_years().get(
+    #                     nid[9:11])) + Constants.SLASH + str(nid[11:])
+    #         elif str(str_nid).find('/') == -1 and len(str(str_nid)) == 21:
+    #             return str(str_nid)
+    #         elif str(str_nid).startswith('0'):
+    #             return ''
+    #         elif str(str_nid).find('_') == -1 or str(str_nid).find('/') == -1 and len(str(str_nid)) < 21:
+    #             return ''
+    #     else:
+    #         return ''
     @staticmethod
     def format_nid(str_nid):
-        if str_nid.startswith('ART') and str(str_nid).find('_') == -1:
+        if str_nid.startswith('ART') and str_nid.count('_') == 7 and len(str_nid) == 20:
             if len(str_nid.split('.')[1]) == 16:
-                nid = str_nid.split('.')[1]
-                return '0' + str(nid[0:9]) + Constants.SLASH + \
-                    str(Constants().get_years().get(
-                        nid[9:11])) + Constants.SLASH + str(nid[11:])
-            elif str(str_nid).find('/') == -1 and len(str(str_nid)) == 21:
-                return str(str_nid)
-            elif str(str_nid).startswith('0'):
+                return '0107010901' + str_nid.replace('_', '', 7)
+            else:
                 return ''
-            elif str(str_nid).find('_') == -1 or str(str_nid).find('/') == -1 and len(str(str_nid)) < 21:
-                return ''
+        elif str_nid.startswith('ART') and str_nid.find('_') == -1 and len(str_nid) == 23:
+            hf_code = str_nid.split('.')[1].split('/')[0]
+            short_year = str_nid.split('.')[1].split('/')[1]
+            ord_number = str_nid.split('.')[1].split('/')[2]
+            return hf_code + Constants.SLASH + str(Constants().get_years().get(short_year)) + Constants.SLASH + ord_number
+        elif str_nid.startswith('ART') and str(str_nid).find('_') == -1 and len(str_nid) == 25:
+            return str_nid.split('.')[1]
+        elif str_nid.startswith('0') and str_nid.count('/') == 2 and str_nid.find('_') == -1 and len(str_nid) == -1 and len(str_nid) == 21:
+            return str_nid
         else:
             return ''
 

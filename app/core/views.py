@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from core.forms import ExcelForm
-from core.models import CsvFile, ExcelFile, ViralLoad
+from core.models import CsvFile, ExcelFile, ViralLoad, UnidadeSanitaria
 from core.utils.data_convertion import DataConversion
 from core.service.data_from_openmrs import OpenMRSData
 from core.service.post_labdata import LabData
@@ -28,6 +28,8 @@ def upload_excel_file(request):
             data = csv.reader(f)
             next(data)
             for row in data:
+                # if row[12] == UnidadeSanitaria.objects.get(nome='CS Ponta Gea').nome:
+
                 if str(row[56]).startswith('<'):
                     viral_load_data = ''
                     viral_load_qualitative_data = row[56]
@@ -50,17 +52,21 @@ def upload_excel_file(request):
                         str(row[32])),
                     access_date=DataConversion.convert_to_datetime(
                         str(row[34])),
-                    nid=DataConversion.format_nid(str(row[41])),
+                    nid=DataConversion.format_nid(str(row[23])),
                     viral_load=viral_load_data,
                     viral_load_qualitative=viral_load_qualitative_data
                 )
                 viralLoad.save()
+                ViralLoad.objects.exclude(
+                    health_facility__contains='CS Ponta Gea').delete()
                 ViralLoad.objects.filter(nid="").delete()
-                ViralLoad.objects.filter(viral_load__contains="NAME").delete()
+                ViralLoad.objects.filter(
+                    viral_load__contains="NAME").delete()
+                ViralLoad.objects.filter(nid__contains='ART').delete()
 
-            patients = OpenMRSData()
-            patients.fetch_patient_data(
-                'ws/rest/v1/reportingrest/dataSet/00796d15-890f-4cec-95d3-046caebe00db')
-            LabData().post_data('http://197.218.241.174:8080/hpt/ws/rest/v1/encounter')
+            # patients = OpenMRSData()
+            # patients.fetch_patient_data(
+            #     'ws/rest/v1/reportingrest/dataSet/00796d15-890f-4cec-95d3-046caebe00db')
+            # LabData().post_data('http://197.218.241.174:8080/hpt/ws/rest/v1/encounter')
 
     return render(request, 'app/upload.html', {'form': form})

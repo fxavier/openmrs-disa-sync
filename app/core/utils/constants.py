@@ -73,7 +73,7 @@ class Constants:
     SLASH = '/'
 
     AUTH = (
-        'admin', 'eSaude123'
+        'xavier,nhagumbe', 'Go$btgo1'
     )
 
     def get_uuids(self):

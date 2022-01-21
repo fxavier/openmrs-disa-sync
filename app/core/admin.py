@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from core.models import CsvFile, ExcelFile, Patient, ViralLoad, Encounter, Observation
+from core.models import CsvFile, ExcelFile, Patient, ViralLoad, Encounter, Observation, \
+    UnidadeSanitaria
 
 
 class ViralLoadAdmin(admin.ModelAdmin):
@@ -17,3 +18,4 @@ admin.site.register(ViralLoad, ViralLoadAdmin)
 admin.site.register(Patient)
 admin.site.register(Encounter)
 admin.site.register(Observation)
+admin.site.register(UnidadeSanitaria)

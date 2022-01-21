@@ -23,6 +23,17 @@ class CsvFile(models.Model):
         return f'File Id{self.id} File name {self.file_name}'
 
 
+class UnidadeSanitaria(models.Model):
+    codigo = models.CharField(max_length=20)
+    nome = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = 'Unidades Sanitarias'
+
+    def __str__(self):
+        return self.nome
+
+
 class ViralLoad(models.Model):
     laboratory_id = models.CharField(max_length=100, null=True, blank=True)
     sector = models.CharField(max_length=30, blank=True, null=True)
